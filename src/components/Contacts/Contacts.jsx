@@ -1,7 +1,7 @@
-import { Container, Title, Info, Value } from './Statistics.styled';
+import { Container, Title, Info, Value } from './Contacts.styled';
 import { PropTypes } from 'prop-types';
 
-export const Statistics = ({
+export const Contacts = ({
   good,
   neutral,
   bad,
@@ -33,7 +33,7 @@ export const Statistics = ({
   );
 };
 
-Statistics.propTypes = {
+Contacts.propTypes = {
   good: PropTypes.number.isRequired,
   neutral: PropTypes.number.isRequired,
   bad: PropTypes.number.isRequired,
