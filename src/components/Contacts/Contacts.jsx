@@ -1,42 +1,30 @@
-import { Container, Title, Info, Value } from './Contacts.styled';
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
+import { List, ListItem, Button } from './Contacts.styled';
 
-export const Contacts = ({
-  good,
-  neutral,
-  bad,
-  totalFeedback,
-  PositiveFeedbackPercentage,
-}) => {
+
+export const Contacts = ({ contacts, onDelete }) => {
   return (
-    <Container>
-      <Title>Statistics</Title>
-      <Info>
-        Good: <Value>{good > 0 && good}</Value>
-      </Info>
-      <Info>
-        Neutral: <Value>{neutral > 0 && neutral}</Value>
-      </Info>
-      <Info>
-        Bad: <Value>{bad > 0 && bad}</Value>
-      </Info>
-      <Info>
-        Total: <Value>{totalFeedback > 0 && totalFeedback}</Value>
-      </Info>
-      <Info>
-        Positive feedbacks:
-        <Value>
-          {PositiveFeedbackPercentage > 0 && `${PositiveFeedbackPercentage}%`}
-        </Value>
-      </Info>
-    </Container>
+    <List>
+      {contacts.map(({ name, id, number }) => {
+        return (
+          <ListItem key={id}>
+            <span>{name}: </span>
+            <span>{number}</span>
+            <Button onClick={() => onDelete(id)}>Delete</Button>
+          </ListItem>
+        );
+      })}
+    </List>
   );
 };
 
 Contacts.propTypes = {
-  good: PropTypes.number.isRequired,
-  neutral: PropTypes.number.isRequired,
-  bad: PropTypes.number.isRequired,
-  totalFeedback: PropTypes.number.isRequired,
-  PositiveFeedbackPercentage: PropTypes.number.isRequired,
+  contacts: PropTypes.arrayOf(
+    PropTypes.exact({
+      name: PropTypes.string.isRequired,
+      number: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    })
+  ),
+  onDelete: PropTypes.func.isRequired,
 };

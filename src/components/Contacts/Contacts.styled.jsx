@@ -1,19 +1,19 @@
 import styled from 'styled-components';
 
+export const List = styled.ul`
+
+`;
+
+export const ListItem = styled.li`
+gap: 20px; 
+margin: 10px 0;
+`;
+
+export const Button = styled.button`
+margin-left: 20px; 
+`;
+
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
-
-export const Title = styled.h2`
 
 `;
 
-export const Info = styled.p`
-
-`;
-
-export const Value = styled.span`
- 
-`;

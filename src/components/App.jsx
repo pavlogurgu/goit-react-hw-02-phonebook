@@ -1,49 +1,73 @@
+import { InputForm } from './InputForm/InputForm';
 import { Component } from 'react';
 import { Contacts } from './Contacts/Contacts';
-import { Buttons } from './Buttons/Buttons';
-import { AppPart } from './Buttons/Buttons.styled';
-
+import { nanoid } from 'nanoid';
+import { Filter } from './Filter/Filter';
+import { Container } from '../components/InputForm/InputForm.styled';
 
 export class App extends Component {
   state = {
     contacts: [],
-    name: ''
-  };
-  btnText = {
-    addBtnText: 'Add Contact'
-  }
-
-  onAddContact = contact => {
-    this.state.contacts.push(contact)
+    filter: '',
   };
 
- 
+  checkContactAvailability = newData => {
+    const { contacts } = this.state;
+    return contacts.find(
+      ({ name }) => name.toLowerCase() === newData.name.toLowerCase()
+    );
+  };
+
+  formSubmitHandler = newData => {
+    newData.id = nanoid();
+    if (this.checkContactAvailability(newData)) {
+      alert(`${newData.name} is already in contacts`);
+      return;
+    }
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, newData],
+    }));
+  };
+
+  contactDeleteHandler = contactId => {
+    const { contacts } = this.state;
+    const filteredContacts = contacts.filter(({ id }) => {
+      return id !== contactId;
+    });
+    this.setState({
+      contacts: filteredContacts,
+    });
+  };
+  changeFilter = event => {
+    this.setState({
+      filter: event.currentTarget.value,
+    });
+  };
+
+  getFilteredContacts = () => {
+    const { filter, contacts } = this.state;
+    const normilizeFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normilizeFilter)
+    );
+  };
 
   render() {
-    const { contacts, name } = this.state;
-
-   
-
-    const options = Object.values(this.btnText);
-
-
-
+    const { contacts, filter } = this.state;
+    const visibleContacts = this.getFilteredContacts();
     return (
-      <AppPart>
-        <h1>Add your contacts</h1>
-
-          <Contacts
-            contacts={contacts}
-            name={name}
-         
-          />
-          <Buttons
-          options={options}
-          onAddContact={this.onAddContact}
+      <Container>
+        <h2>PhoneBook</h2>
+        <InputForm onSubmit={this.formSubmitHandler} />
+        {contacts.length > 0 && <h3>Contacts</h3>}
+        {contacts.length > 0 && (
+          <Filter filterValue={filter} onValueChange={this.changeFilter} />
+        )}
+        <Contacts
+          contacts={visibleContacts}
+          onDelete={this.contactDeleteHandler}
         />
-      </AppPart>
+      </Container>
     );
   }
 }
-
-
